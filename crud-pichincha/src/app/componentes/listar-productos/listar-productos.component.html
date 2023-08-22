@@ -1,0 +1,53 @@
+
+<input type="text" class="input" [(ngModel)]="searchTerm" (input)="applyFilter()" placeholder="Search...">
+<button class="button"> Agregar </button>
+
+
+<div class="body">
+    <br>
+    <br>
+    <div class="tabla-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Logo</th>
+            <th>Nombre del producto</th>
+            <th>Descripcion</th>
+            <th>Fecha de Liberación</th>
+            <th>Fecha de Reestructuración</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredData; let i = index">
+            <td><img src= "{{ item.logo }}" height="25px" > </td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.date_release | date:'dd/MM/yyy'}}</td>
+            <td>{{ item.date_revision | date:'dd/MM/yyy'}}</td>
+            <td>
+              <div class="dropdown">
+                <button class="dropdown-toggle" (click)="toggleDropdown(i)"><img src="../../../assets/images/showMore.png" height="10px" ></button>
+                <ul class="dropdown-menu" *ngIf="isDropdownOpen[i]">
+                  <li (click)="editItem()">Editar</li>
+                  <li (click)="deleteItem()">Eliminar</li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    
+      <div class="paginador">
+        <select  [(ngModel)]="itemsPerPage" (ngModelChange)="applyFilter()">
+          <option *ngFor="let option of options" [value]="option.value">{{ option.label }}  </option>
+        </select>
+      </div>
+
+
+   
+    </div>
+  <br>
+  <br>
+</div>
+
