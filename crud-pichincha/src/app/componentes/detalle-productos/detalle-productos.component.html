@@ -1,1 +1,78 @@
-<p>detalle-productos works!</p>
+<form [formGroup]="formulario" (ngSubmit)="submitForm()" class="formulario-container">
+
+<div class="formulario-container">
+    
+
+    <div class="input-column">
+      <div>
+        <label for="id">ID:</label>
+        <input  *ngIf="!updateForm"  type="text" id="id" formControlName="id"  [(ngModel)]="producto.id" (input)="verificarId()"/>
+        <input *ngIf="updateForm"  type="text" id="id" readonly formControlName="id"  [(ngModel)]="producto.id" (input)="verificarId()"/>
+        <div *ngIf="errorId" class="error-message">El Id ya existe.</div>
+        <div *ngIf="formulario.get('id').invalid && formulario.get('id').touched" class="error-message">
+          <div *ngIf="formulario.get('id').hasError('required')">El ID es requerido.</div>
+          <div *ngIf="formulario.get('id').hasError('minlength')">Longitud minima debe ser de 3.</div>
+          <div *ngIf="formulario.get('id').hasError('maxlength')">Longitud máxima debe ser de 10.</div>
+
+        </div>
+      </div>
+  
+
+        <div>
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" formControlName="descripcion"   [(ngModel)]="producto.description" />
+            <div *ngIf="formulario.get('descripcion').invalid && formulario.get('descripcion').touched" class="error-message">
+              <div *ngIf="formulario.get('descripcion').hasError('required')">La descripción es requerida.</div>
+              <div *ngIf="formulario.get('descripcion').hasError('minlength')">Longitud minima debe ser de 10.</div>
+              <div *ngIf="formulario.get('descripcion').hasError('maxlength')">Longitud máxima debe ser de 200.</div>
+            </div>
+          </div>
+          
+    
+      <div>
+        <label for="liberacion">Fecha de liberación:</label>
+        <input type="date" id="direccion" formControlName="liberacion" min={{maxDate}} [(ngModel)]="fechaReleaseLabel" />
+        <div *ngIf="formulario.get('liberacion').invalid && formulario.get('liberacion').touched" class="error-message">
+          <div *ngIf="formulario.get('liberacion').hasError('liberacion')">La fecha de liberación es  requerida.</div>
+        </div>
+      </div>
+    </div>
+    <div class="input-column">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" formControlName="nombre" [(ngModel)]="producto.name">
+            <div *ngIf="formulario.get('nombre').invalid && formulario.get('nombre').touched" class="error-message">
+              <div *ngIf="formulario.get('nombre').hasError('required')">El Nombre debe ser requerido.</div>
+              <div *ngIf="formulario.get('nombre').hasError('minlength')">Longitud minima debe ser de 5.</div>
+              <div *ngIf="formulario.get('nombre').hasError('maxlength')">Longitud máxima debe ser de 100.</div>
+         
+            </div>
+          </div>
+          
+      <div>
+        <label for="logo">Logo:</label>
+        <input type="text" id="logo" formControlName="logo" [(ngModel)]="producto.logo"  />
+        <div *ngIf="formulario.get('logo').invalid && formulario.get('logo').touched" class="error-message">
+          <div *ngIf="formulario.get('logo').hasError('required')">El logo es requerido.</div>
+        </div>
+      </div>
+
+      <div>
+        <label for="revision">Fecha de Revisión:</label>
+        <input type="text" readonly id="revision"  value= {{fechaRevisionLabel}}> 
+      </div>
+    </div>
+    <button   class="submit-button" (click)="reiniciar()" >Reiniciar</button>
+    <div>
+    <div *ngIf="errorId">
+        <button  [disabled]="true"  class="cancel-button">Enviar</button>
+    </div>
+    <div *ngIf="!errorId">
+        <button type="submit" [disabled]="formulario.invalid"  class="cancel-button">Enviar</button>
+    </div>
+    </div>
+    
+
+</div>
+
+</form>

@@ -1,6 +1,6 @@
 
 <input type="text" class="input" [(ngModel)]="searchTerm" (input)="applyFilter()" placeholder="Search...">
-<button class="button"> Agregar </button>
+<button class="button" (click)="agregar()"> Agregar </button>
 
 
 <div class="body">
@@ -27,10 +27,10 @@
             <td>{{ item.date_revision | date:'dd/MM/yyy'}}</td>
             <td>
               <div class="dropdown">
-                <button class="dropdown-toggle" (click)="toggleDropdown(i)"><img src="../../../assets/images/showMore.png" height="10px" ></button>
+                <button class="dropdown-toggle" (click)="toggleDropdown(i)"><img src="../../../assets/images/showMore.png" style="border-radius: 50%;" height="10px" ></button>
                 <ul class="dropdown-menu" *ngIf="isDropdownOpen[i]">
-                  <li (click)="editItem()">Editar</li>
-                  <li (click)="deleteItem()">Eliminar</li>
+                  <li (click)="editItem(item)">Editar</li>
+                  <li (click)="deleteItem(item.id, i)">Eliminar</li>
                 </ul>
               </div>
             </td>
@@ -38,14 +38,24 @@
         </tbody>
       </table>
     
-      <div class="paginador">
+
+
+      <div class="grid-container">
+
+      <div class="right">
+          {{total}} resultados
+      </div>
+
+      <div class="left">
         <select  [(ngModel)]="itemsPerPage" (ngModelChange)="applyFilter()">
           <option *ngFor="let option of options" [value]="option.value">{{ option.label }}  </option>
         </select>
       </div>
+      </div>
 
 
-   
+     
+
     </div>
   <br>
   <br>

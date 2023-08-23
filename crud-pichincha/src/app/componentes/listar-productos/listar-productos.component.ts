@@ -1,7 +1,7 @@
 import { Component , OnInit} from '@angular/core';
 import { Producto } from 'src/app/interface/producto';
 import { CrudProductosService } from 'src/app/servicios/crud-productos.service';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-listar-productos',
@@ -13,18 +13,18 @@ export class ListarProductosComponent implements OnInit{
   filteredData: any[] = []; // Datos filtrados
   searchTerm: string = ''; // Término de búsqueda
 
-  posAux = 0
+  total = 0
   itemsPerPage = 5;
   isDropdownOpen = [];
-  selectedOption: any; // Variable para almacenar la opción seleccionada
+
   options = [
-    { value: 1, label: '1' },
-    { value: 3, label: '3' },
-    { value: 5, label: '5' }
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' }
   ];
 
   constructor (
-    private _service : CrudProductosService
+    private _service : CrudProductosService , private _router: Router
   ){
 
   }
@@ -36,12 +36,6 @@ export class ListarProductosComponent implements OnInit{
     return this.items.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
- 
-
-
-  showOptions = false;
-
-  
 
   toggleDropdown(cont : number) {
     if (!this.isDropdownOpen[cont] ||   this.isDropdownOpen[cont] == undefined){
@@ -51,27 +45,57 @@ export class ListarProductosComponent implements OnInit{
   } 
   }
 
-  editItem() {
-    // Lógica para editar el elemento
-    console.log('Editar elemento');
+  editItem(producto) {
+    localStorage.setItem("id", producto.id )
+    localStorage.setItem("logo", producto.logo )
+    localStorage.setItem("name", producto.name )
+    localStorage.setItem("description", producto.description )
+    localStorage.setItem("date_revision", producto.date_revision )
+    localStorage.setItem("date_release", producto.date_release )
+
+    this._router.navigateByUrl('/detalleProductos')
   }
 
-  deleteItem() {
-    // Lógica para eliminar el elemento
-    console.log('Eliminar elemento');
-  }
+
   
   ngOnInit(): void {
-  this._service.obtenerProductos(1).subscribe(
-    data =>{
-     this.items = data
-     this.filteredData = this.paginatedItems
-    },
-    error=>{
-     console.log(error)
-    }
-  )
+ this.obtenerProductos();
   }
+
+
+  obtenerProductos(){
+    this._service.obtenerProductos(1).subscribe(
+      data =>{
+       this.items = data
+       this.total = this.items.length
+       this.filteredData = this.paginatedItems
+      },
+      error=>{
+       console.log(error)
+      }
+    )
+  }
+
+  deleteItem(idProducto : string, cont: number) {
+    this.filteredData.splice(cont,1)
+    this.total = this.total-1
+      this._service.eliminarProductos(idProducto, 1).subscribe(
+        data =>{
+                   this.ngOnInit();
+        },
+        error=>{
+         console.log(error)
+        }
+      )
+      this.toggleDropdown(cont)
+  }
+
+  agregar(){
+    this._router.navigateByUrl('/detalleProductos')
+  }
+
+
+
 
 
    applyFilter(): void {
@@ -80,8 +104,6 @@ export class ListarProductosComponent implements OnInit{
       item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
-  showDetails(): void {
-console.log(this.itemsPerPage)
-  }
+
 
 }
