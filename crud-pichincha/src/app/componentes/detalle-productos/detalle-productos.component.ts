@@ -41,8 +41,10 @@ export class DetalleProductosComponent implements OnInit{
       this.date2 = new Date(date);
       this.date2.setDate(this.date2.getDate()+365)
       this.producto.date_revision = this.date2
+
       this.fechaReleaseLabel = this.datePipe.transform(this.date2,'dd/MM/yyyy')
       this.fechaRevisionLabel = this.datePipe.transform( this.producto.date_release ,'yyyy-MM-dd' )
+  
       if (this.updateForm){
         this.actualizar(this.producto)
       }
@@ -77,8 +79,13 @@ export class DetalleProductosComponent implements OnInit{
   this.producto.description = localStorage.getItem("description")
   this.producto.date_revision = new Date ( localStorage.getItem("date_revision"))
   this.producto.date_release = new Date ( localStorage.getItem("date_release"))
+  try{
   this.fechaRevisionLabel = this.datePipe.transform(  this.producto.date_revision ,'dd/MM/yyyy' )
   this.fechaReleaseLabel = this.datePipe.transform(  this.producto.date_release ,'yyyy-MM-dd')
+} catch(e){
+  this.fechaReleaseLabel = null
+  this.fechaRevisionLabel = null
+}
   localStorage.clear()
   this.updateForm = true
  }else{

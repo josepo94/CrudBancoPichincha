@@ -6,6 +6,7 @@ import { CrudProductosService } from 'src/app/servicios/crud-productos.service';
 import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 let responseProducts = 
     [
@@ -40,7 +41,8 @@ describe('ListarProductosComponent', () => {
       declarations: [ListarProductosComponent],
       imports: [RouterTestingModule, FormsModule, HttpClientTestingModule],
       providers: [
-        { provide: CrudProductosService, useValue: mockCrudService }
+        { provide: CrudProductosService, useValue: mockCrudService },
+        { provide: Router, useValue: jasmine.createSpyObj('Router', ['navigateByUrl']) }
       ]
     }).compileComponents();
   });
@@ -86,5 +88,28 @@ describe('ListarProductosComponent', () => {
     expect(component.total).toEqual(1);
     expect(component.filteredData.length).toEqual(1);
   });
+
+  
+  it('should Edit', () => {
+    //llama a la funcion editar
+   let producto  = {date_release : null,date_revision:null, description:"test", id:"1",logo:"testLogo",name:"testName" }
+component.editItem(producto)
+     })
+
+     it('should agregar', () => {
+      //llama a la funcion editar
+     let producto  = {date_release : null,date_revision:null, description:"test", id:"1",logo:"testLogo",name:"testName" }
+    component.agregar()
+       })
+
+
+       it('should applyFilter', () => {
+        //llama a la funcion editar
+       component.items  = [{date_release : null,date_revision:null, description:"test", id:"1",logo:"testLogo",name:"testName" }]
+        component.applyFilter()
+        expect(component.filteredData).toBeDefined
+
+         })
+
 
 });
